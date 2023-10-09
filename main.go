@@ -3,14 +3,12 @@ package main
 import (
 	"fmt"
 
-
 	"os"
 
 	"github.com/gin-gonic/gin"
-	tokenApiHandler "github.com/wuchenyanghaoshuai/vblog/apps/token/api"
-	toeknImpl "github.com/wuchenyanghaoshuai/vblog/apps/token/impl"
-	userImpl "github.com/wuchenyanghaoshuai/vblog/apps/user/impl"
+	_ "github.com/wuchenyanghaoshuai/vblog/apps"
 	"github.com/wuchenyanghaoshuai/vblog/conf"
+	"github.com/wuchenyanghaoshuai/vblog/ioc"
 )
 
 func main() {
@@ -22,16 +20,30 @@ func main() {
 	}
 	//2. 初始化控制
 	//user controller
-	userServiceImpl :=userImpl.NewUserServiceImpl()
+	// userServiceImpl :=userImpl.NewUserServiceImpl()
 	//token controller
-	tokenServiceImpl := toeknImpl.NewTokenServiceImpl(userServiceImpl)
+	// tokenServiceImpl := toeknImpl.NewTokenServiceImpl(userServiceImpl)
 	// token api handler
-	tkApiHandler := tokenApiHandler.NewTokenApiHandler(tokenServiceImpl)
+
+	//通过Ioc来完成依赖的装载，完成了依赖的倒置(ioc来依赖对象注册)
+	if err := ioc.Controller().Init(); err !=nil{
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	//初始化apihandler
+	if err := ioc.ApiHandler().Init(); err !=nil{
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+
 
 	//3.启动http协议服务器，注册handler路由
 
 	r := gin.Default()
-	tkApiHandler.Registry(r.Group("/api/vblog"))
+	ioc.ApiHandler().RouteRegistry(r.Group("/api/vblog"))
+	
 	// 设置路由
 
 	// 启动HTTP服务器

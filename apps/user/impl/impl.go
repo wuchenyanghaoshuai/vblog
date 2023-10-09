@@ -5,19 +5,32 @@ import (
 
 	"github.com/wuchenyanghaoshuai/vblog/apps/user"
 	"github.com/wuchenyanghaoshuai/vblog/exception"
+	"github.com/wuchenyanghaoshuai/vblog/ioc"
 
 	"github.com/wuchenyanghaoshuai/vblog/conf"
 	"gorm.io/gorm"
 )
+
+// 倒入这个包的时候，直接把这个对象 UserServiceImpl注册给ioc
+//注册user业务模块的控制器
+func init(){
+ioc.Controller().Registry(&UserServiceImpl{})
+}
+
 
 //var _ user.Service = &UserServiceImpl{}
 
 // 装逼写法，等价于上面的写法
 var _ user.Service = (*UserServiceImpl)(nil)
 
-func NewUserServiceImpl() *UserServiceImpl {
-       
-	return &UserServiceImpl{db: conf.C().Mysql.GetConn().Debug()}
+
+func(i *UserServiceImpl)Init()error{
+	i.db = conf.C().Mysql.GetConn().Debug()
+	return nil
+}
+//定义到托管Ioc里面的名称
+func(i *UserServiceImpl) Name()string{
+	return user.AppName
 }
 
 //他是user service 服务的控制器

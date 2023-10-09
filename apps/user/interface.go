@@ -8,6 +8,9 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 )
+const(
+	AppName = "user"
+)
 
 // 定义user包的能力,就是定义接口
 // 站在使用方的角度来定义，

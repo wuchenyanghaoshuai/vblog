@@ -2,6 +2,9 @@ package token
 
 import "context"
 
+const(
+	AppName = "token"
+)
 
 type Service interface{
 	//登陆接口

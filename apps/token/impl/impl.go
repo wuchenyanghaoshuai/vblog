@@ -3,19 +3,17 @@ package impl
 import (
 	"context"
 
-
 	"github.com/wuchenyanghaoshuai/vblog/apps/token"
 	"github.com/wuchenyanghaoshuai/vblog/apps/user"
 	"github.com/wuchenyanghaoshuai/vblog/conf"
 	"github.com/wuchenyanghaoshuai/vblog/exception"
+	"github.com/wuchenyanghaoshuai/vblog/ioc"
 	"gorm.io/gorm"
 )
 
-func NewTokenServiceImpl(userSvcImpl user.Service) *TokenServiceImpl{
-	return &TokenServiceImpl{
-		db: conf.C().Mysql.GetConn().Debug(),
-		user: userSvcImpl,
-	}
+
+func init(){
+	ioc.Controller().Registry(&TokenServiceImpl{})
 }
 
 type TokenServiceImpl struct {
@@ -25,6 +23,15 @@ type TokenServiceImpl struct {
 	user user.Service
 }
 
+
+func(i *TokenServiceImpl) Init()error{
+	i.db = conf.C().Mysql.GetConn().Debug()
+	i.user =  ioc.Controller().Get(user.AppName).(user.Service)
+	return nil
+}
+func (i *TokenServiceImpl)Name()string{
+	return token.AppName
+}
 
 func(i *TokenServiceImpl) Login(ctx context.Context,req *token.LoginRequest)(*token.Token,error){
 	//1. 查询用户是否存在

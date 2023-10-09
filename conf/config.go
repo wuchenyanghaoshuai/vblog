@@ -18,7 +18,7 @@ func DefaultConfig() *Config {
 			Password: "123456",
 		},
 		App: &App{
-			HttpPort: 7080,
+			HttpPort: 8090,
 			HttpHost: "127.0.0.1",
 		},
 

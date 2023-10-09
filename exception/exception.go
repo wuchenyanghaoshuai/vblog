@@ -1,20 +1,26 @@
 package exception
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
-
-func New(code int,format string,a ...any)*ApiException{
+func New(code int, format string, a ...any) *ApiException {
 	return &ApiException{
-		Code: code,
-		Message: fmt.Sprintf(format, a...),
+		BizCode:  code,
+		Message:  fmt.Sprintf(format, a...),
+		HttpCode: http.StatusOK,
 	}
 }
 
-type ApiException struct{
-	Code int `json:"code"`
-	Message string `json:"message"`
+type ApiException struct {
+	//业务异常
+	BizCode  int    `json:"code"`
+	Message  string `json:"message"`
+	Data     any    `json:"data"`
+	HttpCode int    `json:"http_code"`
 }
 
-func (e *ApiException)Error()string{
+func (e *ApiException) Error() string {
 	return e.Message
 }
