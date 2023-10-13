@@ -5,7 +5,6 @@ go 1.20
 require (
 	github.com/BurntSushi/toml v1.3.2
 	github.com/caarlos0/env/v6 v6.10.1
-	github.com/eapache/go-resiliency v1.4.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/rs/xid v1.5.0
 	golang.org/x/crypto v0.9.0
@@ -14,6 +13,7 @@ require (
 )
 
 require (
+	dario.cat/mergo v1.0.0 // indirect
 	github.com/bytedance/sonic v1.9.1 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
