@@ -23,6 +23,20 @@ type Service interface {
 	UpdateBlog(context.Context, *UpdateBlogRequest) (*Blog, error)
 	//删除博客
 	DeleteBlog(context.Context, *DeleteBlogRequest) error
+	//文章审核，审核通过的菜可以被看到
+	AuditBlog(context.Context, *AuditBlogRequest) (*Blog, error)
+}
+
+func NewAuditBlogRequest(id string) *AuditBlogRequest {
+	return &AuditBlogRequest{
+		BlogId: id,
+	}
+}
+
+type AuditBlogRequest struct {
+	BlogId string `json:"blog_id"`
+	//是否审核成功
+	IsAuditPass bool `json:"is_audit_pass"`
 }
 
 func NewDescribeBlogRequest(id string) *DescribeBlogRequest {
@@ -63,13 +77,13 @@ func (r *QueryBlogRequest) Offset() int {
 
 func (r *QueryBlogRequest) PasePageSize(ps string) {
 	psInt, err := strconv.ParseInt(ps, 10, 64)
-	if err != nil {
+	if err != nil && psInt != 0 {
 		r.PageSize = int(psInt)
 	}
 }
 func (r *QueryBlogRequest) PasePageNumber(pn string) {
 	psInt, err := strconv.ParseInt(pn, 10, 64)
-	if err != nil {
+	if err != nil && psInt != 0 {
 		r.PageNumber = int(psInt)
 	}
 }

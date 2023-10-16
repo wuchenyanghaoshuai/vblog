@@ -3,9 +3,14 @@ package user
 type Role int
 
 const (
-	ROLE_MEMBER Role = iota
+	//创建者
+	ROLE_AUTHOR Role = iota
+	//审核员
+	ROLE_AUDITOR
+	//系统管理员
 	ROLE_ADMIN
 )
+
 type DescribeBy int
 
 const (

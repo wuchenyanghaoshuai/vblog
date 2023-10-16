@@ -24,8 +24,20 @@ func init() {
 
 func TestCreateUser(t *testing.T) {
 	req := user.NewCreateUserRequest()
-	req.Username = "admin222"
+	req.Username = "admin22"
 	req.Password = "12345"
+	req.Role = user.ROLE_AUTHOR
+	u, err := userSvc.CreateUser(ctx, req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(u)
+}
+func TestCreateAuditUser(t *testing.T) {
+	req := user.NewCreateUserRequest()
+	req.Username = "audit"
+	req.Password = "12345"
+	req.Role = user.ROLE_AUDITOR
 	u, err := userSvc.CreateUser(ctx, req)
 	if err != nil {
 		t.Fatal(err)
@@ -40,7 +52,7 @@ func TestDeleteUser(t *testing.T) {
 }
 
 func TestDescribeUserRequestById(t *testing.T) {
-	req := user.NewDescribeUserRequestById("22")
+	req := user.NewDescribeUserRequestById("28")
 	u, err := userSvc.DescribeUserRequest(ctx, req)
 	if err != nil {
 		t.Fatal(err)
@@ -49,7 +61,7 @@ func TestDescribeUserRequestById(t *testing.T) {
 }
 
 func TestDescribeUserRequestByUserName(t *testing.T) {
-	req := user.NewDescribeUserRequestByUsername("admin1")
+	req := user.NewDescribeUserRequestByUsername("admin22")
 	u, err := userSvc.DescribeUserRequest(ctx, req)
 	if err != nil {
 		t.Fatal(err)

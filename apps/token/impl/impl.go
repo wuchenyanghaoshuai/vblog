@@ -2,7 +2,7 @@ package impl
 
 import (
 	"context"
-
+	"fmt"
 	"github.com/wuchenyanghaoshuai/vblog/apps/token"
 	"github.com/wuchenyanghaoshuai/vblog/apps/user"
 	"github.com/wuchenyanghaoshuai/vblog/conf"
@@ -62,6 +62,7 @@ func (i *TokenServiceImpl) Login(ctx context.Context, req *token.LoginRequest) (
 	if err := i.db.WithContext(ctx).Create(tk).Error; err != nil {
 		return nil, err
 	}
+
 	return tk, nil
 }
 
@@ -81,5 +82,12 @@ func (i *TokenServiceImpl) ValidateToken(ctx context.Context, req *token.Validat
 	if err := tk.IsExpired(); err != nil {
 		return nil, err
 	}
+
+	//补充用户信息，只补充了用户的角色
+	u, err := i.user.DescribeUserRequest(ctx, user.NewDescribeUserRequestById(fmt.Sprintf("%d", tk.UserId)))
+	if err != nil {
+		return nil, err
+	}
+	tk.Role = u.Role
 	return tk, nil
 }

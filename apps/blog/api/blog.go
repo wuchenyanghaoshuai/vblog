@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/wuchenyanghaoshuai/vblog/apps/blog"
 	"github.com/wuchenyanghaoshuai/vblog/apps/token"
+	"github.com/wuchenyanghaoshuai/vblog/apps/user"
 	"github.com/wuchenyanghaoshuai/vblog/middlewares"
 	"github.com/wuchenyanghaoshuai/vblog/response"
 )
@@ -15,10 +16,11 @@ func (h *apiHandler) Registry(r gin.IRouter) {
 
 	//后台管理接口，需要鉴权
 	v1.Use(middlewares.NewTokenAuther().Auth)
-	v1.POST("/", h.CreateBlog)
-	v1.PUT("/:id", h.UpdateBlog)
-	v1.PATCH("/:id", h.PatchBlog)
-	v1.DELETE("/:id", h.DeleteBlog)
+	v1.POST("/", middlewares.Required(user.ROLE_AUTHOR), h.CreateBlog)
+	v1.PUT("/:id", middlewares.Required(user.ROLE_AUTHOR), h.UpdateBlog)
+	v1.PATCH("/:id", middlewares.Required(user.ROLE_AUTHOR), h.PatchBlog)
+	v1.DELETE("/:id", middlewares.Required(user.ROLE_AUTHOR), h.DeleteBlog)
+	v1.POST("/:id/audit", middlewares.Required(user.ROLE_AUDITOR), h.AuditBlog)
 }
 
 func (h *apiHandler) CreateBlog(c *gin.Context) {
@@ -107,4 +109,21 @@ func (h *apiHandler) DeleteBlog(c *gin.Context) {
 		return
 	}
 	response.Success(c, "ok")
+}
+
+func (h *apiHandler) AuditBlog(c *gin.Context) {
+	//判断用户是否登陆
+	//判断当前用户是谁，有没有权限删除
+	in := blog.NewAuditBlogRequest(c.Param("id"))
+	err := c.BindJSON(in)
+	if err != nil {
+		response.Failed(c, err)
+		return
+	}
+	ins, err := h.svc.AuditBlog(c.Request.Context(), in)
+	if err != nil {
+		response.Failed(c, err)
+		return
+	}
+	response.Success(c, ins)
 }

@@ -77,6 +77,21 @@ func (i *blogServiceImpl) QueryBlog(ctx context.Context, in *blog.QueryBlogReque
 	return set, nil
 }
 
+func (i *blogServiceImpl) AuditBlog(ctx context.Context, in *blog.AuditBlogRequest) (*blog.Blog, error) {
+	ins, err := i.DescribeBlog(ctx, blog.NewDescribeBlogRequest(in.BlogId))
+	if err != nil {
+		return nil, err
+	}
+	ins.IsAuditPass = in.IsAuditPass
+
+	ins.AuditAt = time.Now().Unix()
+	err = i.db.WithContext(ctx).Where("id=?", in.BlogId).Updates(ins).Error
+	if err != nil {
+		return nil, err
+	}
+	return ins, err
+}
+
 func (i *blogServiceImpl) DescribeBlog(ctx context.Context, in *blog.DescribeBlogRequest) (*blog.Blog, error) {
 	query := i.db.WithContext(ctx).Model(&blog.Blog{})
 	ins := blog.NewBlog(blog.NewCreateBlogRequest())

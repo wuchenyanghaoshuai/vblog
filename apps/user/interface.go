@@ -3,12 +3,12 @@ package user
 import (
 	"context"
 
-
 	"fmt"
 
 	"golang.org/x/crypto/bcrypt"
 )
-const(
+
+const (
 	AppName = "user"
 )
 
@@ -18,7 +18,7 @@ const(
 type Service interface {
 	CreateUser(context.Context, *CreateUserRequest) (*User, error)
 	DeleteUser(context.Context, *DeleteUserRequest) error
-	DescribeUserRequest(context.Context,*DescribeUserRequest)(*User,error)
+	DescribeUserRequest(context.Context, *DescribeUserRequest) (*User, error)
 }
 
 // 创建用户请求
@@ -27,16 +27,16 @@ type CreateUserRequest struct {
 	Password string `json:"password"`
 	Role     Role   `json:"role"`
 	//比如就存储在数据库里面 存储为json，需要orm来帮我们完成json的序列化和存储
-	Label map[string]string `json:"label" gorm:"serializer:json"`
+	Label    map[string]string `json:"label" gorm:"serializer:json"`
 	isHashed bool
 }
 
-func NewCreateUserRequest() *CreateUserRequest{
-	return &CreateUserRequest{Role: ROLE_MEMBER,Label: map[string]string{}}
+func NewCreateUserRequest() *CreateUserRequest {
+	return &CreateUserRequest{Role: ROLE_AUDITOR, Label: map[string]string{}}
 }
 
-func (req *CreateUserRequest) PasswordHash(){
-	if req.isHashed{
+func (req *CreateUserRequest) PasswordHash() {
+	if req.isHashed {
 		return
 	}
 	b, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
@@ -44,14 +44,13 @@ func (req *CreateUserRequest) PasswordHash(){
 	req.isHashed = true
 }
 
-
-func(req *CreateUserRequest) SetIsHashed(){
+func (req *CreateUserRequest) SetIsHashed() {
 	req.isHashed = true
 }
 
-func(req *CreateUserRequest) Validate()error{
-	if req.Username==""||req.Password==""{
-		
+func (req *CreateUserRequest) Validate() error {
+	if req.Username == "" || req.Password == "" {
+
 		return fmt.Errorf("用户名密码不能为空")
 	}
 	return nil
@@ -61,7 +60,6 @@ func(req *CreateUserRequest) Validate()error{
 type DeleteUserRequest struct {
 	Id int64 `json:"id"`
 }
-
 
 func NewDescribeUserRequestById(id string) *DescribeUserRequest {
 	return &DescribeUserRequest{
@@ -76,9 +74,8 @@ func NewDescribeUserRequestByUsername(username string) *DescribeUserRequest {
 	}
 }
 
-//查询用户 要支持 id 和username来查询
-type DescribeUserRequest struct{
+// 查询用户 要支持 id 和username来查询
+type DescribeUserRequest struct {
 	DescribeBy    DescribeBy `json:"describe_by"`
 	DescribeValue string     `json:"describe_value"`
 }
-

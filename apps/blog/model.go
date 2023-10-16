@@ -46,10 +46,14 @@ type Blog struct {
 	CreatedAt int64 `json:"created_at"`
 	//更新时间
 	UpdatedAt int64 `json:"updated_at"`
+	//审核时间
+	AuditAt int64 `json:"audit_at"`
 	//发布时间
 	PublishedAt int64 `json:"published_at"`
 	//文章的状态
 	Status Status `json:"status"`
+	//是否审核成功
+	IsAuditPass bool `json:"is_audit_pass"`
 	//用户创建博客参数
 	*CreateBlogRequest
 }

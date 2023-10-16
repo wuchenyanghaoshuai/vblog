@@ -12,18 +12,19 @@ import (
 	"github.com/wuchenyanghaoshuai/vblog/exception"
 )
 
-//正常情况数据返回
-func Success(c *gin.Context,data any){
-	c.JSON(http.StatusOK,data)
+// 正常情况数据返回
+func Success(c *gin.Context, data any) {
+	c.JSON(http.StatusOK, data)
 }
 
-func Failed(c *gin.Context,err error){
+func Failed(c *gin.Context, err error) {
+	defer c.Abort()
 	var e *exception.ApiException
-	if v ,ok := err.(*exception.ApiException);ok{
+	if v, ok := err.(*exception.ApiException); ok {
 		e = v
-	}else{
-		e = exception.New(http.StatusInternalServerError,err.Error())
+	} else {
+		e = exception.New(http.StatusInternalServerError, err.Error())
 		e.HttpCode = http.StatusInternalServerError
 	}
-	c.JSON(e.HttpCode,e)
+	c.JSON(e.HttpCode, e)
 }
