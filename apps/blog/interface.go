@@ -76,14 +76,14 @@ func (r *QueryBlogRequest) Offset() int {
 }
 
 func (r *QueryBlogRequest) PasePageSize(ps string) {
-	psInt, err := strconv.ParseInt(ps, 10, 64)
-	if err != nil && psInt != 0 {
+	psInt, _ := strconv.ParseInt(ps, 10, 64)
+	if psInt != 0 {
 		r.PageSize = int(psInt)
 	}
 }
 func (r *QueryBlogRequest) PasePageNumber(pn string) {
-	psInt, err := strconv.ParseInt(pn, 10, 64)
-	if err != nil && psInt != 0 {
+	psInt, _ := strconv.ParseInt(pn, 10, 64)
+	if psInt != 0 {
 		r.PageNumber = int(psInt)
 	}
 }

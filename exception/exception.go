@@ -6,10 +6,14 @@ import (
 )
 
 func New(code int, format string, a ...any) *ApiException {
+	HttpCode := http.StatusInternalServerError
+	if code/100 < 6 && code/100 > 0 {
+		HttpCode = code
+	}
 	return &ApiException{
 		BizCode:  code,
 		Message:  fmt.Sprintf(format, a...),
-		HttpCode: http.StatusOK,
+		HttpCode: HttpCode,
 	}
 }
 
