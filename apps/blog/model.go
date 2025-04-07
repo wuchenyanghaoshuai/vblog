@@ -2,7 +2,7 @@ package blog
 
 import (
 	"encoding/json"
-	"time"
+	"vblog/apps/common"
 )
 
 // 为什么这么写
@@ -12,14 +12,16 @@ import (
 // 保证构造的对象是可用的，不容易出现nil的情况
 func NewBlog()*Blog {
 	return &Blog{
-		Meta: &Meta{CreatedAt: time.Now().Unix()},
-		CreateBlogRequest: &CreateBlogRequest{Tags: map[string]string{}},
+		Meta: common.NewMeta(),
+		CreateBlogRequest: &CreateBlogRequest{
+			Tags: map[string]string{},
+		},
 		ChangeBlogStatusRequest: &ChangeBlogStatusRequest{},
 	}
 }
 
 type Blog struct {
-	*Meta
+	*common.Meta
 	*CreateBlogRequest
 	*ChangeBlogStatusRequest
 }
@@ -28,14 +30,6 @@ func (req *Blog) String() string {
 	return string(dj)
 }
 
-type Meta struct {
-	//用户id
-	UserId int `json:"user_id" gorm:"column:user_id"`
-	//创建时间
-	CreatedAt int64 `json:"created_at" gorm:"column:created_at"`
-	//更新时间
-	UpdatedAt int64 `json:"updated_at" gorm:"column:updated_at"`
-}
 
 
 type CreateBlogRequest struct {
