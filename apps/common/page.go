@@ -14,3 +14,7 @@ type PageRequest struct {
 	//第几页
 	PageNum int `json:"page_num"`
 }
+
+func (req *PageRequest) Offset() int {
+	return (req.PageNum - 1) * req.PageSize
+}

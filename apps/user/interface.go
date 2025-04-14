@@ -13,7 +13,8 @@ type Service interface{
 	// 多个接口，需要做事物(Session)
 	CreateUser(context.Context,*CreateUserRequest)(*User,error)
 	//用户查询
-	QueryUser(context.Context,*QueryUserRequest)(*[]UserSet,error)
+	QueryUser(context.Context,*QueryUserRequest)(*UserSet,error)
+
 }
 
 func NewQueryUserRequest()*QueryUserRequest{
@@ -24,5 +25,6 @@ func NewQueryUserRequest()*QueryUserRequest{
 
 //不需要持久化写入到数据库，所以就不放到model里面
 type QueryUserRequest struct{
+	Username string
 	*common.PageRequest
 }

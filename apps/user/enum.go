@@ -2,9 +2,10 @@ package user
 
 // 枚举定义
 
-type Role string
+type Role int
 
 const (
-	Role_Admin Role = "管理员"
-	Role_VISITOR  Role = "访客"
+	
+	Role_VISITOR  Role = iota
+	Role_Admin 
 )

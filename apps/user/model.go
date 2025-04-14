@@ -2,20 +2,26 @@ package user
 
 import (
 	"encoding/json"
+	"fmt"
+
 	"vblog/apps/common"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 //里面存放的是po，也就是需要持久化的东西
 
-func NewCreateUserRequest()*CreateUserRequest {
+func NewCreateUserRequest() *CreateUserRequest {
+	
 	return &CreateUserRequest{
-		Role: Role_VISITOR,
+		Role:  Role_VISITOR,
 		Label: map[string]string{},
 	}
 }
+
 //需要用户输入的信息
 type CreateUserRequest struct {
-	UserName string `json:"username" gorm:"column:username" validate:"required"`
+	Username string `json:"username" gorm:"column:username" validate:"required"`
 	Password string `json:"password" gorm:"column:password" validate:"required"`
 	Role  Role `json:"role" gorm:"column:role"`
 	//用户标签,本身map不支持直接存到数据库中，需要进行序列化
@@ -24,6 +30,29 @@ type CreateUserRequest struct {
 	Label map[string]string `json:"label" gorm:"column:label;serializer:json"`
 }
 
+
+
+//validator 校验器
+func (req *CreateUserRequest) Validate() error  {
+	if req.Username == "" {
+		return fmt.Errorf("用户名不能为空")
+	}
+	return nil
+}
+
+func (req *CreateUserRequest) HashPassword()  error{
+	cryptoPass,err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	req.Password = string(cryptoPass)
+	return nil
+}
+
+func (req *CreateUserRequest) CheckPassword(password string)  error{
+	return  bcrypt.CompareHashAndPassword([]byte(req.Password), []byte(password))
+
+}
 
 func NewUser(req *CreateUserRequest)*User {
 	return &User{
@@ -35,16 +64,10 @@ func (req *User) String() string {
 	dj,_ := json.MarshalIndent(req, "", "    ")
 	return string(dj)
 }
-
-//通用参数
-type Meta struct {
-	//用户id
-	UserId int `json:"user_id" gorm:"column:user_id"`
-	//创建时间
-	CreatedAt int64 `json:"created_at" gorm:"column:created_at"`
-	//更新时间
-	UpdatedAt int64 `json:"updated_at" gorm:"column:updated_at"`
+func(req *User) TableName() string {
+	return "users"
 }
+
 
 //用户创建成功以后返回一个user对象
 type User struct {
@@ -60,6 +83,6 @@ func NewUserSet()*UserSet {
 }
 
 type UserSet struct {
-	Total int `json:"total"`
+	Total int64 `json:"total"`
 	Items []*User `json:"items"`
 }
