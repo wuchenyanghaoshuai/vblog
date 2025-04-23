@@ -20,7 +20,7 @@ func init() {
 }
 
 func TestIssueToken(t *testing.T) {
-	req:=token.NewIssueTokenRequest("admin","1234567")
+	req:=token.NewIssueTokenRequest("admin","123456")
 	tk,err := serviceImpl.IssueToken(ctx,req)
 	if err != nil  {
 		log.Fatal(err)
@@ -30,9 +30,19 @@ func TestIssueToken(t *testing.T) {
 
 
 func TestRevolkToken(t *testing.T) {
-	serviceImpl.RevolkToken(ctx,nil)
+	req := token.NewRevolkTokenRequest("d04a86emrvq71f4q9ar0","d04a86emrvq71f4q9arg")
+	tk,err := serviceImpl.RevolkToken(ctx,req)
+	if err!= nil {
+		log.Fatal(err)
+	}
+	t.Log(tk)
 }
 
 func TestValidateToken(t *testing.T) {
-	serviceImpl.ValidateToken(ctx,nil)
+	req := token.NewValidateTokenRequest("d04a86emrvq71f4q9ar0")
+	tk,err :=serviceImpl.ValidateToken(ctx,req)
+	if err!= nil {
+		log.Fatal(err)
+	}
+	t.Log(tk)
 }

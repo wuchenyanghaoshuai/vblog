@@ -2,7 +2,9 @@ package impl
 
 import (
 	"context"
+	"fmt"
 	"vblog/apps/conf"
+	"vblog/apps/exception"
 	"vblog/apps/token"
 	"vblog/apps/user"
 
@@ -40,21 +42,51 @@ func(i *TokenServiceImpl) IssueToken(ctx context.Context,in *token.IssueTokenReq
 		return nil,token.ErrAuthFailed
 	}
 	//颁发令牌
-
+	tk := token.NewToken(us.Items[0])
 	//存储令牌到数据库
+	if err := i.db.WithContext(ctx).Create(tk).Error;err!= nil {
+		return nil,exception.ErrServerInternal("保存报错, %s",err)
+	}
 
 	//返回令牌
-	return nil,nil
+	return tk,nil
 }
 //令牌撤销
-func (i *TokenServiceImpl) RevolkToken(context.Context,*token.RevolkTokenRequest) (*token.Token, error){
+func (i *TokenServiceImpl) RevolkToken(ctx context.Context,in *token.RevolkTokenRequest) (*token.Token,error){
+	tk := token.DefaultToken()
+	//查询出token
+	err := i.db.WithContext(ctx).Where("access_token=?",in.AccessToken).First(tk).Error
+	if err!= nil {
+		return nil,exception.ErrServerInternal("查询token报错, %s",err)
+	}
+
+	if tk.RefreshToken != in.RefreshToken {
+		return nil,fmt.Errorf("RefreshToken不匹配")
+	}
+
 	//直接删除数据库中的令牌
-	return nil,nil
+	err = i.db.WithContext(ctx).Where("access_token=?",in.AccessToken).Delete(token.Token{}).Error
+	if  err !=nil{
+		return nil,err
+	}
+	return tk,nil
+	
 }
 //令牌校验
-func (i *TokenServiceImpl) ValidateToken(context.Context,*token.ValidateTokenRequest) (*token.Token, error){
+func (i *TokenServiceImpl) ValidateToken(ctx context.Context,in *token.ValidateTokenRequest) (*token.Token, error){
 	// 查询出token
+	tk := token.DefaultToken()
+	err := i.db.WithContext(ctx).Where("access_token=?",in.AccessToken).First(tk).Error
+	if err != nil {
+		return nil,exception.ErrServerInternal("查询token报错, %s",err)
+	}
 	//判断token是否过期
+	if err := tk.RefreshokenIsExpired();err!= nil {
+		return nil,err
+	}
+	if err := tk.AccessTokenIsExpired();err!= nil {
+		return nil,err
+	}
 	//返回token
-	return nil,nil
+	return tk,nil
 }

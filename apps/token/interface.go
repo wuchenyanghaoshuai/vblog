@@ -28,7 +28,12 @@ type IssueTokenRequest struct {
 	Password string
 	Ismember bool
 }
-
+func NewRevolkTokenRequest(accessToken,refreshToken string) *RevolkTokenRequest {
+	return &RevolkTokenRequest{
+		AccessToken: accessToken,
+		RefreshToken: refreshToken,
+	}
+}
 type RevolkTokenRequest struct {
 	//你需要撤销的令牌
 	// accesstoken跟refreshToken 构成了一对username/password
@@ -40,4 +45,10 @@ type ValidateTokenRequest struct {
 	//你需要撤销的令牌
 	// accesstoken跟refreshToken 构成了一对username/password
 	AccessToken string
+}
+
+func NewValidateTokenRequest(accessToken string) *ValidateTokenRequest {
+	return &ValidateTokenRequest{
+		AccessToken: accessToken,
+	}
 }
