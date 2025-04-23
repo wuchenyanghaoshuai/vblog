@@ -21,7 +21,7 @@ type TokenServiceImpl struct {
 	user user.Service
 }
 
-func(i *TokenServiceImpl) IssueToken(ctx context.Context,in *token.IssueToken) (*token.Token, error){
+func(i *TokenServiceImpl) IssueToken(ctx context.Context,in *token.IssueTokenRequest) (*token.Token, error){
 	//查询用户对象
 	// queryuser 是调用的user.service的接口吗
 	queryUser := user.NewQueryUserRequest()
@@ -31,8 +31,14 @@ func(i *TokenServiceImpl) IssueToken(ctx context.Context,in *token.IssueToken) (
 		return nil,err
 	}
 
+	if len(us.Items) == 0 {
+		return nil,token.ErrAuthFailed
+	}
+
 	//比对用户传递的密码和数据库的密码是否一致
-	us.Items[0].CheckPassword(in.Password)
+	if err := us.Items[0].CheckPassword(in.Password);err != nil {
+		return nil,token.ErrAuthFailed
+	}
 	//颁发令牌
 
 	//存储令牌到数据库
@@ -41,12 +47,12 @@ func(i *TokenServiceImpl) IssueToken(ctx context.Context,in *token.IssueToken) (
 	return nil,nil
 }
 //令牌撤销
-func (i *TokenServiceImpl) RevolkToken(context.Context,*token.RevolkToken) (*token.Token, error){
+func (i *TokenServiceImpl) RevolkToken(context.Context,*token.RevolkTokenRequest) (*token.Token, error){
 	//直接删除数据库中的令牌
 	return nil,nil
 }
 //令牌校验
-func (i *TokenServiceImpl) ValidateToken(context.Context,*token.ValidateToken) (*token.Token, error){
+func (i *TokenServiceImpl) ValidateToken(context.Context,*token.ValidateTokenRequest) (*token.Token, error){
 	// 查询出token
 	//判断token是否过期
 	//返回token

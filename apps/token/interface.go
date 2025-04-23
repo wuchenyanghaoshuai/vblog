@@ -5,27 +5,38 @@ import "context"
 
 type Service interface {
 	//令牌颁发
-	IssueToken(context.Context,*IssueToken) (*Token, error)
+	//调用user模块校验用户密码
+	IssueToken(context.Context,*IssueTokenRequest) (*Token, error)
 	//令牌撤销
-	RevolkToken(context.Context,*RevolkToken) (*Token, error)
+	//删除令牌
+	RevolkToken(context.Context,*RevolkTokenRequest) (*Token, error)
 	//令牌校验
-	ValidateToken(context.Context,*ValidateToken) (*Token, error)
+	//检查令牌是否是我们自己颁发的
+	//并且没有过期
+	ValidateToken(context.Context,*ValidateTokenRequest) (*Token, error)
 }
 
-type IssueToken struct {
+func NewIssueTokenRequest(username,password string) *IssueTokenRequest {
+	return &IssueTokenRequest{
+		Username: username,
+		Password: password,
+		Ismember: false,
+	}
+}
+type IssueTokenRequest struct {
 	Username string
 	Password string
 	Ismember bool
 }
 
-type RevolkToken struct {
+type RevolkTokenRequest struct {
 	//你需要撤销的令牌
 	// accesstoken跟refreshToken 构成了一对username/password
 	AccessToken string
 	//你需要知道正确的刷新令牌
 	RefreshToken string
 }
-type ValidateToken struct {
+type ValidateTokenRequest struct {
 	//你需要撤销的令牌
 	// accesstoken跟refreshToken 构成了一对username/password
 	AccessToken string
