@@ -24,9 +24,9 @@ func NewIssueTokenRequest(username,password string) *IssueTokenRequest {
 	}
 }
 type IssueTokenRequest struct {
-	Username string
-	Password string
-	Ismember bool
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Ismember bool   `json:"is_member"`
 }
 func NewRevolkTokenRequest(accessToken,refreshToken string) *RevolkTokenRequest {
 	return &RevolkTokenRequest{

@@ -5,6 +5,8 @@ type ApiException struct {
 	//业务异常编码，例如 50001  表示token失效
 	Code int `json:"code"`
 	Message  string `json:"message"`
+	//
+	HttpCode int `json:"-"`
 }
 
 //如何实现error接口
