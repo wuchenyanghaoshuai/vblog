@@ -14,6 +14,7 @@ func DefaultConfig()*Config {
 		Application: &Application{
 			Host: "127.0.0.1",
 			Port: 8088,
+			Domain: "http://127.0.0.1",
 		},
 		MySQL: &MySQL{
 			Host: "127.0.0.1",
@@ -37,6 +38,7 @@ type Config struct {
 type Application struct {
 	Host string `toml:"host" yaml:"host" json:"host"`
 	Port int `toml:"port" yaml:"port" json:"port"`
+	Domain string `toml:"domain" yaml:"domain" json:"domain"`
 }
 
 //数据库
