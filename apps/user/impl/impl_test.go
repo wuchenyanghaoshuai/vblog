@@ -5,8 +5,9 @@ import (
 	"crypto/md5"
 	"fmt"
 	"testing"
+	"vblog/apps/ioc"
 	"vblog/apps/user"
-	"vblog/apps/user/impl"
+	
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -20,7 +21,8 @@ var (
 //	QueryUser(context.Context,*QueryUserRequest)(*[]UserSet,error)
 
 func init() {
-	serviceImpl = impl.NewUserServiceImpl()
+	//serviceImpl = impl.NewUserServiceImpl()
+	serviceImpl = ioc.Controller.Get(user.AppName).(user.Service)
 }
 
 func TestCreateUser(t *testing.T) {

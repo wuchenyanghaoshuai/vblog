@@ -3,27 +3,34 @@ package impl
 import (
 	"context"
 
-
 	"vblog/apps/common"
 	"vblog/apps/conf"
+	"vblog/apps/ioc"
 	"vblog/apps/user"
 
 	"gorm.io/gorm"
 )
 
-func NewUserServiceImpl() *UserServiceImpl {
-	return &UserServiceImpl{
-		db: conf.C().MySQL.GetDB(),
-	}
+// func NewUserServiceImpl() *UserServiceImpl {
+// 	return &UserServiceImpl{
+// 		db: conf.C().MySQL.GetDB(),
+// 	}
 
+// }
+//
+func init(){
+	ioc.Controller.Registry(user.AppName,&UserServiceImpl{})
 }
+
 
 type UserServiceImpl struct {
 	db *gorm.DB
 }
-
-
-
+func (i *UserServiceImpl) Init() error {
+	// 1. 获取数据库连接
+	i.db = conf.C().MySQL.GetDB()
+	return nil
+}
 
 func (i *UserServiceImpl) CreateUser(ctx context.Context, in *user.CreateUserRequest) (*user.User, error) {
 	// 1. 校验请求的合法性

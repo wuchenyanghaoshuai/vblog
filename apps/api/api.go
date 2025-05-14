@@ -2,15 +2,16 @@ package api
 
 import (
 	"vblog/apps/conf"
+	"vblog/apps/ioc"
 	"vblog/apps/response"
 	"vblog/apps/token"
 
 	"github.com/gin-gonic/gin"
 )
 
-func NewTokenApiHandler(tokenServiceImpl token.Service) *TokenApiHandler {
+func NewTokenApiHandler() *TokenApiHandler {
 	return &TokenApiHandler{
-		token: tokenServiceImpl,
+		token: ioc.Controller.Get(token.AppName).(token.Service),
 	}
 }
 

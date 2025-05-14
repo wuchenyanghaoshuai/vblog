@@ -2,6 +2,8 @@ package token
 
 import "context"
 
+// AppName 应用名称
+const AppName="token"
 
 type Service interface {
 	//令牌颁发

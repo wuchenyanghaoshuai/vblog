@@ -5,17 +5,35 @@ import (
 	"fmt"
 	"vblog/apps/conf"
 	"vblog/apps/exception"
+	"vblog/apps/ioc"
 	"vblog/apps/token"
 	"vblog/apps/user"
 
 	"gorm.io/gorm"
 )
 
-func NewTokenServiceImpl(userserviceimpl user.Service) *TokenServiceImpl {
-	return &TokenServiceImpl{
-		db: conf.C().MySQL.GetDB(),
-		user: userserviceimpl,
-	}
+//
+func init(){
+	//注册到ioc容器中
+	ioc.Controller.Registry(token.AppName,&TokenServiceImpl{})
+}
+
+
+
+
+// func NewTokenServiceImpl(userserviceimpl user.Service) *TokenServiceImpl {
+// 	return &TokenServiceImpl{
+// 		db: conf.C().MySQL.GetDB(),
+// 		user: userserviceimpl,
+// 	}
+// }
+
+func(i *TokenServiceImpl) Init()error{
+	i.db = conf.C().MySQL.GetDB()
+	//获取对象
+	//断言对象
+	i.user = ioc.Controller.Get(user.AppName).(user.Service)
+	return nil
 }
 
 type TokenServiceImpl struct {

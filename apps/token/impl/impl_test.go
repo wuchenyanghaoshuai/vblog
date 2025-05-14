@@ -5,8 +5,9 @@ import (
 	"log"
 	"testing"
 	"vblog/apps/token"
-	"vblog/apps/token/impl"
-	user "vblog/apps/user/impl"
+
+	"vblog/apps/ioc"
+
 )
 
 
@@ -16,7 +17,9 @@ var (
 )
 
 func init() {
-	serviceImpl = impl.NewTokenServiceImpl(user.NewUserServiceImpl())
+	//serviceImpl = impl.NewTokenServiceImpl(user.NewUserServiceImpl())
+	//去ioc中获取 被测试的业务对象
+	serviceImpl = ioc.Controller.Get(token.AppName).(token.Service)
 }
 
 func TestIssueToken(t *testing.T) {

@@ -5,7 +5,10 @@ import (
 	"vblog/apps/common"
 )
 
-
+const (
+	//业务包的名称,用于托管业务包的业务对象
+	AppName = "user"
+)
 type Service interface{
 	//创建用户
 	//用户取消了请求怎么办
