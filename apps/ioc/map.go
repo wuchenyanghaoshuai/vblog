@@ -1,6 +1,11 @@
 package ioc
 
+import "fmt"
+
+
+
 type MapContainer struct {
+	name string
 	storage map[string]Object
 }
 
@@ -13,10 +18,13 @@ func(c *MapContainer)Get(name string)any{
 	return c.storage[name]
 }
 func (c *MapContainer)Init()error{
-	for _ ,v := range c.storage{
+	for k ,v := range c.storage{
 		if err := v.Init();err != nil {
-			return err
+			return fmt.Errorf("init object %s failed, err: %v", k, err)
 		}
+		fmt.Printf("[%s] %s init success \n",c.name, k)
 	}
 	return nil
 }
+
+

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -33,12 +34,41 @@ type Config struct {
 	MySQL *MySQL `toml:"mysql" yaml:"mysql" json:"mysql"`
 }
 
+
+func (a *Application) GinRootRouter() gin.IRouter {
+	r := a.GinServer()
+	if a.root == nil {
+		a.root = r.Group("vblog").Group("api").Group("v1")
+	}
+	return a.root
+}
+
+func (a *Application) GinServer() *gin.Engine {
+	a.lock.Lock()
+	defer a.lock.Unlock()
+	if a.server == nil {
+		a.server = gin.Default()
+	}
+	return a.server
+}
+
+func (a *Application) Address() string {
+	return fmt.Sprintf("%s:%d", a.Host, a.Port)
+}
+
+func (a *Application) Start() error {
+	r := a.GinServer()
+	return r.Run(a.Address())
+}
 //应用服务
 // 比如服务监听端口
 type Application struct {
 	Host string `toml:"host" yaml:"host" json:"host"`
 	Port int `toml:"port" yaml:"port" json:"port"`
 	Domain string `toml:"domain" yaml:"domain" json:"domain"`
+	server *gin.Engine
+	lock sync.Mutex
+	root gin.IRouter
 }
 
 //数据库

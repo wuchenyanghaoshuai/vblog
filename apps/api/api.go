@@ -9,10 +9,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewTokenApiHandler() *TokenApiHandler {
-	return &TokenApiHandler{
-		token: ioc.Controller.Get(token.AppName).(token.Service),
-	}
+// func NewTokenApiHandler() *TokenApiHandler {
+// 	return &TokenApiHandler{
+// 		token: ioc.Controller.Get(token.AppName).(token.Service),
+// 	}
+// }
+
+func init() {
+	ioc.Api.Registry(token.AppName, &TokenApiHandler{})
+}
+
+func (h *TokenApiHandler) Init() error {
+	 h.token = ioc.Controller.Get(token.AppName).(token.Service)
+	 subRouter := conf.C().Application.GinRootRouter().Group("tokens")
+	 h.Registry(subRouter)
+	return nil
 }
 
 type TokenApiHandler struct {
@@ -22,8 +33,8 @@ type TokenApiHandler struct {
 func(h *TokenApiHandler)Registry(appRouter gin.IRouter){
 	// r := gin.Default()
 	// r.Group("api").Group("v1")
-	appRouter.POST("login",h.Login)
-	appRouter.POST("logout",h.Logout)
+	appRouter.POST("/",h.Login)
+	appRouter.DELETE("/",h.Logout)
 }
 
 
