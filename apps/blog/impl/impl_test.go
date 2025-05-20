@@ -4,6 +4,7 @@ import (
 	"context"
 	"vblog/apps/blog"
 	"vblog/ioc"
+	_ "vblog/apps"
 )
 
 var (

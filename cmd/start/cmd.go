@@ -7,11 +7,9 @@ import (
 	"vblog/ioc"
 
 	"github.com/spf13/cobra"
-	_ "vblog/apps/token/impl"
-	_ "vblog/apps/user/impl"
-	_ "vblog/apps/api"
-
 )
+
+
 var Cmd = &cobra.Command{
 	Use:   "start",
 	Short: "Start vblog server",
