@@ -4,6 +4,8 @@ import (
 	"context"
 	"vblog/apps/blog"
 	"vblog/ioc"
+
+	//倒入被测试的对象，全部倒入
 	_ "vblog/apps"
 )
 
