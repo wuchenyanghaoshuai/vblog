@@ -3,9 +3,9 @@ package impl
 import (
 	"context"
 	"fmt"
-	"vblog/apps/conf"
-	"vblog/apps/exception"
-	"vblog/apps/ioc"
+	"vblog/conf"
+	"vblog/exception"
+	"vblog/ioc"
 	"vblog/apps/token"
 	"vblog/apps/user"
 

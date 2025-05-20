@@ -1,6 +1,8 @@
 package main
 
-import "vblog/apps/cmd"
+import "vblog/cmd"
+
+
 
 func main() {
 	if err := cmd.RootCmd.Execute(); err != nil {

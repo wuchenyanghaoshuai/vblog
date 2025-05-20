@@ -1,9 +1,9 @@
 package api
 
 import (
-	"vblog/apps/conf"
-	"vblog/apps/ioc"
-	"vblog/apps/response"
+	"vblog/conf"
+	"vblog/ioc"
+	"vblog/response"
 	"vblog/apps/token"
 
 	"github.com/gin-gonic/gin"

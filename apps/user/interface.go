@@ -2,7 +2,7 @@ package user
 
 import (
 	"context"
-	"vblog/apps/common"
+	"vblog/common"
 )
 
 const (

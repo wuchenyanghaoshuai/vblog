@@ -2,9 +2,20 @@ package blog
 
 import (
 	"encoding/json"
-	"vblog/apps/common"
+	"vblog/common"
 )
 
+func NewBlogSet() *BlogSet {
+	return &BlogSet{
+		Items: []*Blog{},
+	}
+}
+
+type BlogSet struct {
+
+	Items []*Blog `json:"items"`
+	Total int64 `json:"total"`
+}
 // 为什么这么写
 //因为直接使用blog的话在初始化的时候会提供具体的值，如果使用newblog，直接返回了一个*Blog，而不是具体的值
 // 因为没有具体的默认值，所以在手动调用或者测试的时候，直接赋值就可以了，最大化的保证了灵活性
@@ -30,7 +41,11 @@ func (req *Blog) String() string {
 	return string(dj)
 }
 
-
+func NewCreateBlogRequest() *CreateBlogRequest {
+	return &CreateBlogRequest{
+		Tags: map[string]string{},
+	}
+}
 
 type CreateBlogRequest struct {
 	//标题

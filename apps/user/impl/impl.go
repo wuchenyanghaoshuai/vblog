@@ -3,9 +3,9 @@ package impl
 import (
 	"context"
 
-	"vblog/apps/common"
-	"vblog/apps/conf"
-	"vblog/apps/ioc"
+	"vblog/common"
+	"vblog/conf"
+	"vblog/ioc"
 	"vblog/apps/user"
 
 	"gorm.io/gorm"

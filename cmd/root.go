@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	initCmd "vblog/apps/cmd/init"
-	"vblog/apps/cmd/start"	
+	initCmd "vblog/cmd/init"
+	"vblog/cmd/start"
 	"github.com/spf13/cobra"
 )
 

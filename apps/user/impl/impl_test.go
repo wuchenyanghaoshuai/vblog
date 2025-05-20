@@ -5,7 +5,7 @@ import (
 	"crypto/md5"
 	"fmt"
 	"testing"
-	"vblog/apps/ioc"
+	"vblog/ioc"
 	"vblog/apps/user"
 	
 

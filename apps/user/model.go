@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"vblog/apps/common"
+	"vblog/common"
 
 	"golang.org/x/crypto/bcrypt"
 )

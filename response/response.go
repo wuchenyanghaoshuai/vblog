@@ -2,7 +2,7 @@ package response
 
 import (
 	"net/http"
-	"vblog/apps/exception"
+	"vblog/exception"
 
 	"github.com/gin-gonic/gin"
 )

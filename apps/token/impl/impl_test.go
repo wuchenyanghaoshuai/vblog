@@ -6,7 +6,7 @@ import (
 	"testing"
 	"vblog/apps/token"
 
-	"vblog/apps/ioc"
+	"vblog/ioc"
 
 )
 

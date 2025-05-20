@@ -3,14 +3,14 @@ package start
 import (
 	"fmt"
 	"os"
-//	"vblog/apps/cmd"
-	"vblog/apps/conf"
-	"vblog/apps/ioc"
+	"vblog/conf"
+	"vblog/ioc"
 
 	"github.com/spf13/cobra"
 	_ "vblog/apps/token/impl"
 	_ "vblog/apps/user/impl"
 	_ "vblog/apps/api"
+
 )
 var Cmd = &cobra.Command{
 	Use:   "start",
