@@ -5,18 +5,22 @@ import (
 	"log"
 	"testing"
 	"vblog/apps/token"
+	"vblog/test"
 
 	"vblog/ioc"
-
 )
 
 
 var (
+
+
   serviceImpl token.Service
   ctx = context.Background()	
 )
 
 func init() {
+	//初始化单测环境
+	test.DevelopmentSetup()
 	//serviceImpl = impl.NewTokenServiceImpl(user.NewUserServiceImpl())
 	//去ioc中获取 被测试的业务对象
 	serviceImpl = ioc.Controller.Get(token.AppName).(token.Service)

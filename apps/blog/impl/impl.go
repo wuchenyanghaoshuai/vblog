@@ -10,15 +10,15 @@ import (
 
 
 func init(){
-	ioc.Controller.Registry(blog.AppName, &UserServiceImpl{})
+	ioc.Controller.Registry(blog.AppName, &BlogServiceImpl{})
 }
 
-type UserServiceImpl struct {
+type BlogServiceImpl struct {
 	db *gorm.DB
 
 }
 
-func (i *UserServiceImpl) Init() error {
+func (i *BlogServiceImpl) Init() error {
 
 	i.db = conf.C().MySQL.GetDB()
 	return nil

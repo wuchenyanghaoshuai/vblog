@@ -2,7 +2,7 @@ package exception_test
 
 import (
 	"testing"
-	"vblog/apps/exception"
+	"vblog/exception"
 )
 
 

@@ -5,9 +5,9 @@ import (
 	"crypto/md5"
 	"fmt"
 	"testing"
-	"vblog/ioc"
 	"vblog/apps/user"
-	
+	"vblog/ioc"
+	"vblog/test"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -21,6 +21,8 @@ var (
 //	QueryUser(context.Context,*QueryUserRequest)(*[]UserSet,error)
 
 func init() {
+	//初始化单测环境
+	test.DevelopmentSetup()
 	//serviceImpl = impl.NewUserServiceImpl()
 	serviceImpl = ioc.Controller.Get(user.AppName).(user.Service)
 }

@@ -10,9 +10,11 @@ func NewBlogSet() *BlogSet {
 		Items: []*Blog{},
 	}
 }
-
+// func (req *BlogSet) String() string {
+// 	dj,_ := json.MarshalIndent(req, "", "    ")
+// 	return string(dj)
+// }
 type BlogSet struct {
-
 	Items []*Blog `json:"items"`
 	Total int64 `json:"total"`
 }
@@ -27,7 +29,9 @@ func NewBlog()*Blog {
 		CreateBlogRequest: &CreateBlogRequest{
 			Tags: map[string]string{},
 		},
-		ChangeBlogStatusRequest: &ChangeBlogStatusRequest{},
+		ChangeBlogStatusRequest: &ChangeBlogStatusRequest{
+			Status: Status_Draft,
+		},
 	}
 }
 
@@ -60,6 +64,12 @@ type CreateBlogRequest struct {
 	CreateBy string `json:"create_by" gorm:"column:create_by"`
 	Tags map[string]string `json:"tags" gorm:"column:tags;serializer:json"`
 }
+func (req *CreateBlogRequest) Validate() error {
+	//这里可以使用validator进行参数验证
+	//如果验证失败，返回错误
+	return common.Validate(req)
+}
+
 func (req *CreateBlogRequest) String() string {
 	dj,_ := json.MarshalIndent(req, "", "    ")
 	return string(dj)
@@ -68,9 +78,9 @@ func (req *CreateBlogRequest) String() string {
 
 type ChangeBlogStatusRequest struct {
 	//发布时间
-	PublishAt int64 `json:"publish_at" gorm:"column:publish_at"`
+	PublishedAt int64 `json:"published_at" gorm:"column:published_at"`
 	//状态  草稿/已发布
-	Status string `json:"status" gorm:"column:status"`
+	Status Status `json:"status" gorm:"column:status"`
 }
 func (req *ChangeBlogStatusRequest) String() string {
 	dj,_ := json.MarshalIndent(req, "", "    ")

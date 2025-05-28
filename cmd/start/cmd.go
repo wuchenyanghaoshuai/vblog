@@ -1,10 +1,10 @@
 package start
 
 import (
-	"fmt"
+
 	"os"
 	"vblog/conf"
-	"vblog/ioc"
+
 
 	"github.com/spf13/cobra"
 )
@@ -20,12 +20,8 @@ var Cmd = &cobra.Command{
 	if configPath == "" {
 		configPath = "etc/application.yaml"
 	}
-	cobra.CheckErr(conf.LoadConfigFromYaml(configPath))
-	fmt.Println("configPath:", configPath)
-	//初始化ioc Controller
-	cobra.CheckErr(ioc.Controller.Init())
-	//初始化ioc Api
-	cobra.CheckErr(ioc.Api.Init())
+
+
 	//启动
 	cobra.CheckErr(conf.C().Application.Start())
 	},

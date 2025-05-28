@@ -24,7 +24,7 @@ func TestCreateBlogRequest(t *testing.T) {
 
 func TestChangeBlogStatusRequest(t *testing.T) {
 	ins := blog.NewBlog()
-	ins.PublishAt = time.Now().Unix()
-	ins.Status = "0"
+	ins.PublishedAt = time.Now().Unix()
+	ins.Status = blog.Status_Draft
 	t.Log(ins.ChangeBlogStatusRequest)
 }

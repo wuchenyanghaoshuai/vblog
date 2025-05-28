@@ -3,7 +3,7 @@ package conf_test
 import (
 	"os"
 	"testing"
-	"vblog/apps/conf"
+	"vblog/conf"
 
 	"github.com/go-playground/assert/v2"
 )

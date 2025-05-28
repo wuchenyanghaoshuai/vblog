@@ -36,8 +36,6 @@ CREATE TABLE `blogs` (
   `status` tinyint NOT NULL COMMENT '文章状态',
   `summary` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '文章概要信息',
   `create_by` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '创建人',
-  `audit_at` int NOT NULL COMMENT '审核时间',
-  `is_audit_pass` tinyint NOT NULL COMMENT '是否审核通过',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_title` (`title`) COMMENT 'titile添加唯一键约束'
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
