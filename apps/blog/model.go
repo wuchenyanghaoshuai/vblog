@@ -2,6 +2,7 @@ package blog
 
 import (
 	"encoding/json"
+	"time"
 	"vblog/common"
 )
 
@@ -81,6 +82,12 @@ type ChangeBlogStatusRequest struct {
 	PublishedAt int64 `json:"published_at" gorm:"column:published_at"`
 	//状态  草稿/已发布
 	Status Status `json:"status" gorm:"column:status"`
+}
+func (req *ChangeBlogStatusRequest) SetStatus(status Status) {
+	switch req.Status{
+		case Status_Published:
+			req.PublishedAt = time.Now().Unix() //设置发布时间为当前时间
+	}
 }
 func (req *ChangeBlogStatusRequest) String() string {
 	dj,_ := json.MarshalIndent(req, "", "    ")

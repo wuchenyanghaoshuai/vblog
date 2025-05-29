@@ -3,6 +3,7 @@ module vblog
 go 1.22.1
 
 require (
+	dario.cat/mergo v1.0.2
 	github.com/caarlos0/env/v6 v6.10.1
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-playground/assert/v2 v2.2.0
