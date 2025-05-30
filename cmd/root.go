@@ -7,6 +7,7 @@ import (
 	"vblog/conf"
 	"vblog/ioc"
 
+	_ "vblog/apps" // Import all apps to ensure they are registered
 	"github.com/spf13/cobra"
 )
 
@@ -15,12 +16,6 @@ var RootCmd = &cobra.Command{
 	Short: "Vblog Api Server",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		cobra.CheckErr(conf.LoadConfigFromYaml(configPath))
-		fmt.Println("configPath:", configPath)
-		//初始化ioc Controller
-		cobra.CheckErr(ioc.Controller.Init())
-		//初始化ioc Api
-		cobra.CheckErr(ioc.Api.Init())
 
 		if len(args) > 0 {
 			if args[0] == "version" {
@@ -37,6 +32,17 @@ var (
 	configPath string
 )
 
+func Execute() error{
+	cobra.OnInitialize(func() {
+		//加载配置
+		cobra.CheckErr(conf.LoadConfigFromYaml(configPath))
+		//初始化ioc Controller
+		cobra.CheckErr(ioc.Controller.Init())
+		//初始化ioc Api
+		cobra.CheckErr(ioc.Api.Init())
+	})
+	return RootCmd.Execute()
+}
 
 func init() {
 	//这里可以添加子命令

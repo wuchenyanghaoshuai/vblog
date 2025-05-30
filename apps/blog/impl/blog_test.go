@@ -10,7 +10,7 @@ import (
 func TestCreateBlog(t *testing.T) {
 	req := blog.NewCreateBlogRequest()
 	req.Author = "Chenyang Wu"
-	req.Title = "Go全站开发4"
+	req.Title = "Go全站开发5"
 	req.Content = "MD内容填充"
 	req.Summary = "Go全站开发的内容简介"
 	//Tags map[string]string `json:"tags" gorm:"column:tags;serializer:json"`
