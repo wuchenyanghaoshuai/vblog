@@ -85,7 +85,7 @@ type ChangeBlogStatusRequest struct {
 }
 func (req *ChangeBlogStatusRequest) SetStatus(status Status) {
 	switch req.Status{
-		c ase Status_Published:
+		case Status_Published:
 			req.PublishedAt = time.Now().Unix() //设置发布时间为当前时间
 	}
 }
