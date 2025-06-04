@@ -74,6 +74,7 @@ func (i *BlogServiceImpl) UpdateBlog(ctx context.Context, in *blog.UpdateBlogReq
 		//全量更新 ,你传递什么我就保存什么
 		ins.CreateBlogRequest = in.CreateBlogRequest
 	case common.UPDATE_MODE_PATCH:
+
 		//部分更新	， 只更新有变化的字段
 		err := mergo.MergeWithOverwrite(ins.CreateBlogRequest, in.CreateBlogRequest)
 		if err != nil {
@@ -117,6 +118,7 @@ func (i *BlogServiceImpl) UpdateBlogStatus(ctx context.Context, in *blog.UpdateB
 	}
 	//更新状态
 	ins.ChangeBlogStatusRequest = in.ChangeBlogStatusRequest
+	ins.SetStatus(in.Status) // 设置状态
 	err = i.db.WithContext(ctx).Table("blogs").Where("id = ?", in.BlogId).
 		Updates(map[string]interface{}{"status": in.Status}).Error
 	if err != nil {
