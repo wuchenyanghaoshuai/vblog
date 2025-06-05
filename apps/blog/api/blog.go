@@ -2,17 +2,22 @@ package api
 
 import (
 	"vblog/apps/blog"
+	"vblog/apps/token"
 	"vblog/common"
 	"vblog/exception"
+	"vblog/middleware"
 	"vblog/response"
 
 	"github.com/gin-gonic/gin"
 )
 
 func (h *BlogApiHandler) Registry(appRouter gin.IRouter) {
-	appRouter.POST("/", h.CreateBlog)
+	//不需要鉴权的接口
 	appRouter.GET("/", h.QueryBlog)
 	appRouter.GET("/:id", h.DescribeBlog)
+	//修改变更需要认证
+	appRouter.Use(middleware.Auth)
+	appRouter.POST("/", h.CreateBlog)
 	appRouter.PUT("/:id", h.PutUpdateBlog)
 	appRouter.PATCH("/:id", h.PatchUpdateBlog)
 	appRouter.POST("/:id/status", h.UpdateBlogStatus)
@@ -41,6 +46,11 @@ func (h *BlogApiHandler) CreateBlog(c *gin.Context) {
 		response.Failed(err, c)
 		return
 	}
+	//补充用户数据
+	if  v,ok := c.Get(token.GIN_TOKEN_KEY_NAME);ok{
+		req.CreateBy = v.(*token.Token).UserName
+	}
+	
 	//2. 业务处理
 	ins, err := h.svc.CreateBlog(c.Request.Context(), req)
 	if err != nil {

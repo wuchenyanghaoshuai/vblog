@@ -19,3 +19,11 @@ func NewApiException(code int, message string) *ApiException {
 		Message: message,
 	}
 }
+func(e *ApiException)WithMessage(message string)*ApiException{
+	e.Message = message
+	return e
+}
+func(e *ApiException)WithHttpCode(httpCode int)*ApiException{
+	e.HttpCode = httpCode
+	return e
+}
