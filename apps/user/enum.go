@@ -7,5 +7,6 @@ type Role int
 const (
 	
 	Role_VISITOR  Role = iota
+	Role_Author
 	Role_Admin 
 )

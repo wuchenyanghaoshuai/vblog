@@ -105,6 +105,17 @@ func (i *TokenServiceImpl) ValidateToken(ctx context.Context,in *token.ValidateT
 	if err := tk.AccessTokenIsExpired();err!= nil {
 		return nil,err
 	}
+	//判断用户角色
+	queryUser := user.NewQueryUserRequest()
+	queryUser.Username = tk.UserName
+	us,err := i.user.QueryUser(ctx,queryUser)
+	if err != nil {
+		return nil,err
+	}
+	if len(us.Items) == 0 {
+		return nil,fmt.Errorf("token user not found 用户不存在")
+	}
+	tk.Role = us.Items[0].Role
 	//返回token
 	return tk,nil
 }

@@ -3,6 +3,7 @@ package api
 import (
 	"vblog/apps/blog"
 	"vblog/apps/token"
+	"vblog/apps/user"
 	"vblog/common"
 	"vblog/exception"
 	"vblog/middleware"
@@ -17,11 +18,11 @@ func (h *BlogApiHandler) Registry(appRouter gin.IRouter) {
 	appRouter.GET("/:id", h.DescribeBlog)
 	//修改变更需要认证
 	appRouter.Use(middleware.Auth)
-	appRouter.POST("/", h.CreateBlog)
-	appRouter.PUT("/:id", h.PutUpdateBlog)
-	appRouter.PATCH("/:id", h.PatchUpdateBlog)
-	appRouter.POST("/:id/status", h.UpdateBlogStatus)
-	appRouter.DELETE("/:id", h.DeleteBlog)
+	appRouter.POST("/",middleware.RequireRole(user.Role_Author), h.CreateBlog)
+	appRouter.PUT("/:id",middleware.RequireRole(user.Role_Author), h.PutUpdateBlog)
+	appRouter.PATCH("/:id",middleware.RequireRole(user.Role_Author), h.PatchUpdateBlog)
+	appRouter.POST("/:id/status",middleware.RequireRole(user.Role_Author), h.UpdateBlogStatus)
+	appRouter.DELETE("/:id",middleware.RequireRole(user.Role_Author), h.DeleteBlog)
 }
 //postman里直接发起Get请求 
 //http://127.0.0.1:8088/vblog/api/v1/blogs?keywords=全站开发

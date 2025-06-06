@@ -30,13 +30,13 @@ func init() {
 func TestCreateUser(t *testing.T) {
 
 	req := user.NewCreateUserRequest()
-	req.Username = "adminnnn"
+	req.Username = "admin"
 	req.Password = "123456"
 	//Label map[string]string
 	req.Label = map[string]string{
-		"角色": "管理员",
+		"角色": "admin",
 	}
-	req.Role=1
+	req.Role=user.Role_Admin
 	
 	ins, err := serviceImpl.CreateUser(ctx, req)
 	if err != nil {
