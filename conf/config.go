@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"sync"
 
+
 	"github.com/gin-gonic/gin"
+	"github.com/gin-contrib/cors"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -48,7 +50,9 @@ func (a *Application) GinServer() *gin.Engine {
 	defer a.lock.Unlock()
 	if a.server == nil {
 		a.server = gin.Default()
+		a.server.Use(cors.Default())
 	}
+	
 	return a.server
 }
 
